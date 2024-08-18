@@ -1,7 +1,6 @@
 from django.shortcuts import render
 import yfinance as yf
 import pandas as pd
-from . import config
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
