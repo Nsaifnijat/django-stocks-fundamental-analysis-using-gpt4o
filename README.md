@@ -27,7 +27,7 @@ Redis (for Channels and Celery)
 Installation
 
 Clone the repository:
-Copygit clone https://github.com/Nsaifnijat/django-stocks-fundamental-analysis-using-gpt4o.git
+git clone https://github.com/Nsaifnijat/django-stocks-fundamental-analysis-using-gpt4o.git
 cd django-stocks-fundamental-analysis-using-gpt4o
 
 Create a virtual environment and activate it:
@@ -46,14 +46,27 @@ python manage.py createsuperuser
 
 Running the Application
 
-Start the Redis server
---> redis-server
-Start the Celery worker:
---> celery -A realtimeapp worker -l INFO
---> celery -A realtimeapp beat -l INFO
-Run the Django development server:
---> python manage.py runserver  #you fundamental is upto date and realtime but the price that is displayed on the page might not appear, you can use the following command for that
---> daphne -p 8001 realtimeapp.asgi:application   #this can give the realtime price of stocks
+# Start the Redis server
+# Redis is used for caching and as a message broker for Celery
+redis-server
+
+# Start the Celery worker
+# This processes background tasks for your application
+celery -A realtimeapp worker -l INFO
+
+# Start the Celery beat scheduler
+# This is used for scheduling periodic tasks
+celery -A realtimeapp beat -l INFO
+
+# Run the Django development server
+# This starts your main application server
+# Note: Fundamental analysis will be up-to-date, but stock prices might not update in real-time
+python manage.py runserver
+
+# (Optional) Run the application using Daphne for real-time price updates
+# This enables WebSocket connections for live stock price updates
+daphne -p 8001 realtimeapp.asgi:application
+
 
 API Usage
 The project includes a RESTful API for stock data. You can access it at /api/stocks/.
