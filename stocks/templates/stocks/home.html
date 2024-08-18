@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Links Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Background animation */
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2, #ff6b6b, #ff9a9e);
+            animation: gradient-animation 15s ease infinite;
+            background-size: 300% 300%;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Profile Picture */
+        .profile-pic {
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 6px solid rgba(255, 255, 255, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        /* LinkedIn Button */
+        .linkedin-btn {
+            background: linear-gradient(135deg, #0077b5, #00aaff);
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .linkedin-btn:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, #005582, #0088ff);
+        }
+
+        .linkedin-btn svg {
+            margin-right: 8px;
+        }
+
+        /* Hover Card Effect */
+        .hover-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.5), rgba(240, 240, 240, 0.5));
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.1), -8px -8px 16px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 16px 16px 32px rgba(0, 0, 0, 0.2), -16px -16px 32px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Icon Background */
+        .icon-bg {
+            background: linear-gradient(135deg, #12c2e9, #c471ed, #f64f59);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .icon-bg-green {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .icon-bg:hover, .icon-bg-green:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body class="h-screen flex flex-col items-center justify-center text-center text-white p-6">
+    <!-- Profile Section -->
+    <div class="mb-10 glass p-8 max-w-lg">
+        <img src="{% static 'stocks/profile.jpeg' %}" alt="Your Photo" class="profile-pic w-40 h-40 mb-4 mx-auto">
+        <h1 class="text-4xl font-bold mb-2">Nazar Saifnijat</h1>
+        <p class="text-xl italic mb-4">"Crafting code, designing dreams, and driving innovation."</p>
+        <p class="text-lg mb-6">
+            A passionate software developer with a keen eye for detail and a drive to create impactful solutions. 
+            With expertise in full-stack development and AI-driven applications, I bring ideas to life, transforming concepts into reality.
+        </p>
+        <a href="https://www.linkedin.com/in/nazar-saifnijat-357a7678?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BpiA6qNr%2BRW25o3T4lMBcnA%3D%3D" class="linkedin-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.4 20h-3.6v-11h3.6v11zm-1.8-12.5c-1.21 0-2.2-.99-2.2-2.2s.99-2.2 2.2-2.2 2.2.99 2.2 2.2-.99 2.2-2.2 2.2zm13.2 12.5h-3.6v-5.5c0-1.32-.03-3-1.82-3-1.83 0-2.12 1.43-2.12 2.91v5.59h-3.6v-11h3.46v1.49h.05c.48-.9 1.64-1.82 3.38-1.82 3.61 0 4.28 2.37 4.28 5.45v6.88z"/>
+            </svg>
+            Connect on LinkedIn
+        </a>
+    </div>
+
+    <!-- App Links Section -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-md sm:max-w-2xl mx-auto">
+        
+        <!-- App 1 -->
+        <a href="{% url 'chatbot' %}" class="block p-8 rounded-lg hover-card glass">
+            <div class="flex items-center space-x-6">
+                <div class="icon-bg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-white">ChatBot</h3>
+                    <p class="text-md text-white mt-2">Chat with OpenAI Models.</p>
+                </div>
+            </div>
+        </a>
+        
+        <!-- App 2 -->
+        <a href="{% url 'stock-fundamentals' %}" class="block p-8 rounded-lg hover-card glass">
+            <div class="flex items-center space-x-6">
+                <div class="icon-bg-green">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-white">Fundamentals</h3>
+                    <p class="text-md text-white mt-2">Access stocks fundamental data in real-time and analyze them using up-to-date AI models.</p>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+</body>
+
+</html>

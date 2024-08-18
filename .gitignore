@@ -1,0 +1,12 @@
+.env
+db.sqlite3
+dump.rdb
+celerybeat-schedule.db
+.DS_Store
+
+# Ignore compiled Python files and cache directories
+__pycache__/
+*.py[cod]
+
+venv/
+env/

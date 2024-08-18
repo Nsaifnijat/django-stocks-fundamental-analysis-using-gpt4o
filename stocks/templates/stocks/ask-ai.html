@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <style>
+        .chat-container {
+            height: calc(100vh - 180px);
+        }
+        .copy-btn {
+            display: none;
+        }
+        .message-container:hover .copy-btn {
+            display: block;
+        }
+        pre[class*="language-"] {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1em;
+            border-radius: 5px;
+            overflow: auto;
+        }
+        .copy-code-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #f5f5f5;
+            color: #333;
+            padding: 2px 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            display: none;
+        }
+        pre:hover .copy-code-btn {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold">Stock Fundamental Analysis Chatbot</h1>
+            
+                <div class="input-group mb-3">
+                    <input type="text" name="ticker" id="ticker" class="form-control" placeholder="Enter stock ticker" value="{{ ticker }}">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-group-text" for="metricSelect">Select Metric</label>
+                    <select class="form-select" id="metricSelect" name="metric">
+                        <option value="info" {% if metric == 'info' %}selected{% endif %}>Key Financial Ratios and Info</option>
+                        <option value="balance_sheet" {% if metric == 'balance_sheet' %}selected{% endif %}>Balance Sheet</option>
+                        <option value="income_statement" {% if metric == 'income_statement' %}selected{% endif %}>Income Statement</option>
+                        <option value="cash_flow" {% if metric == 'cash_flow' %}selected{% endif %}>Cash Flow Statement</option>
+                        <option value="quarterly_financials" {% if metric == 'quarterly_financials' %}selected{% endif %}>Quarterly Financials</option>
+                        <option value="recommendations" {% if metric == 'recommendations' %}selected{% endif %}>Analyst Recommendations</option>
+                        <option value="major_holders" {% if metric == 'major_holders' %}selected{% endif %}>Major Holders</option>
+                        <option value="institutional_holders" {% if metric == 'institutional_holders' %}selected{% endif %}>Institutional Holders</option>
+                        <option value="dividends" {% if metric == 'dividends' %}selected{% endif %}>Dividends</option>
+                        <option value="splits" {% if metric == 'splits' %}selected{% endif %}>Stock Splits</option>
+                    </select>
+                </div>
+            
+        </div>
+        <div id="chat-container" class="chat-container bg-white rounded-lg shadow-md p-4 overflow-y-auto mb-4">
+            <div id="chat-messages"></div>
+        </div>
+        <div class="flex items-center">
+            <textarea id="user-input" class="flex-grow border rounded-l-lg p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" rows="1" placeholder="Type your message..."></textarea>
+            <button id="send-btn" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition duration-300">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const ticker = document.getElementById('ticker')
+        const metricSelect = document.getElementById('metricSelect');
+
+        function addMessage(role, content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message-container mb-4 ${role === 'user' ? 'text-right' : ''}`;
+            const sanitizedContent = marked.parse(content);
+
+            messageDiv.innerHTML = `
+                <div class="inline-block ${role === 'user' ? 'bg-blue-100' : 'bg-gray-100'} rounded-lg p-2 max-w-[80%] relative group">
+                    <div class="message-content">${sanitizedContent}</div>
+                    <button class="copy-btn absolute top-2 right-2 bg-white text-gray-600 p-1 rounded text-xs opacity-50 hover:opacity-100">Copy</button>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+
+            // Highlight code blocks
+            Prism.highlightAllUnder(messageDiv);
+
+            // Add copy button for each code block
+            messageDiv.querySelectorAll('pre').forEach(pre => {
+                const copyCodeBtn = document.createElement('button');
+                copyCodeBtn.textContent = 'Copy';
+                copyCodeBtn.className = 'copy-code-btn';
+                copyCodeBtn.addEventListener('click', () => {
+                    copyToClipboard(pre.innerText);
+                });
+                pre.appendChild(copyCodeBtn);
+            });
+
+            // Scroll to the new message
+            setTimeout(() => {
+                messageDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage('user', message);
+            userInput.value = '';
+
+            const selecteMetric = metricSelect.value;
+            const selectedTicker = ticker.value;
+            
+            try {
+                const response = await fetch('/api/ask/chat/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ message: message, metric: selecteMetric, ticker: selectedTicker })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addMessage('assistant', data.message);
+                    ticker.value = '';
+                } else {
+                    const errorData = await response.json();
+                    addMessage('assistant', `Error: ${errorData.message}`);
+                }
+            } catch (error) {
+                addMessage('assistant', 'Sorry, there was an error processing your message.');
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>
