@@ -68,6 +68,15 @@ python manage.py runserver
 daphne -p 8001 realtimeapp.asgi:application
 
 
+
+#create a .env file and have the following secrets saved. put your own keys
+OPEN_AI_KEY = 'sk-nnnnnnn'
+DJANGO_SECRET_KEY = "django-insecure-tjjjksjx"
+GPT_MODEL =  "gpt-4o"
+
+
+
+
 API Usage
 The project includes a RESTful API for stock data. You can access it at /api/stocks/.
 Contributing
