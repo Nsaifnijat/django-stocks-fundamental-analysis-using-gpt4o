@@ -111,9 +111,7 @@ Replace the placeholder values with your actual keys.
    daphne -p 8001 realtimeapp.asgi:application
    ```
 
-## API Usage
 
-The project includes a RESTful API for stock data. You can access it at `/api/stocks/`.
 
 ## Contributing
 
