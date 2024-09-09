@@ -1,83 +1,123 @@
-# django-stocks-fundamental-analysis-using-gpt4o
-Django Stock Fundamental Analysis using GPT MODELS and  Chatbot
-Overview
-This project includes two apps a chatbot and a realtime stocks fundamental analysis with GPT4o, the realtime analysis app is a Django-based web application for performing fundamental analysis on stocks. It leverages real-time financial data and provides a user-friendly interface for analyzing stock performance and fundamentals.
-Features
+# Django Stock Fundamental Analysis using GPT Models and Chatbot
 
-Real-time stock data fetching using yfinance
-Asynchronous task processing with Celery
-Real-time updates using Django Channels
-RESTful API for stock data retrieval
-Chatbot for other tasks.
+## Overview
 
-Technologies Used
+This project comprises two main applications:
+1. A chatbot for various tasks
+2. A real-time stocks fundamental analysis tool using GPT models
 
-Django 5.0.6
-Celery 5.4.0
-Channels 4.1.0
-Daphne 4.1.2
-Django REST Framework 3.15.2
-yfinance 0.2.40
+The real-time analysis app is a Django-based web application that performs fundamental analysis on stocks. It leverages real-time financial data and provides a user-friendly interface for analyzing stock performance and fundamentals.
 
-Prerequisites
+## Features
 
-Python 3.x
-Redis (for Channels and Celery)
+- Real-time stock data fetching using yfinance
+- Asynchronous task processing with **Celery**
+- Real-time updates using **Django Channels**
+- RESTful API for stock data retrieval
+- Chatbot for other tasks
+- Integration with GPT models for advanced analysis
 
-Installation
+## Technologies Used
 
-Clone the repository:
-git clone https://github.com/Nsaifnijat/django-stocks-fundamental-analysis-using-gpt4o.git
-cd django-stocks-fundamental-analysis-using-gpt4o
+### Backend
+- Django 5.0.6
+- **Celery 5.4.0**
+- **Django Channels 4.1.0**
+- Daphne 4.1.2
+- Django REST Framework 3.15.2
+- yfinance 0.2.40
+- Python 3.x
 
-Create a virtual environment and activate it:
-Copypython -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+### Frontend
+- HTML
+- JavaScript
+- Tailwind CSS
 
-Install the required packages:
-brew/pip install -r requirements.txt
+### Other
+- **Redis** (for Channels and Celery)
 
-Set up the database:
-python manage.py migrate
+## Prerequisites
 
-Create a superuser (optional):
-python manage.py createsuperuser
+- Python 3.x
+- Redis
 
+## Installation
 
-Running the Application
+1. Clone the repository:
+   ```
+   git clone https://github.com/Nsaifnijat/django-stocks-fundamental-analysis-using-gpt4o.git
+   cd django-stocks-fundamental-analysis-using-gpt4o
+   ```
 
-# Start the Redis server
-# Redis is used for caching and as a message broker for Celery
-redis-server
+2. Create and activate a virtual environment:
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
 
-# Start the Celery worker
-# This processes background tasks for your application
-celery -A realtimeapp worker -l INFO
+3. Install the required packages:
+   ```
+   pip install -r requirements.txt
+   ```
 
-# Start the Celery beat scheduler
-# This is used for scheduling periodic tasks
-celery -A realtimeapp beat -l INFO
+4. Set up the database:
+   ```
+   python manage.py migrate
+   ```
 
-# Run the Django development server
-# This starts your main application server
-# Note: Fundamental analysis will be up-to-date, but stock prices might not update in real-time
-python manage.py runserver
+5. (Optional) Create a superuser:
+   ```
+   python manage.py createsuperuser
+   ```
 
-# (Optional) Run the application using Daphne for real-time price updates
-# This enables WebSocket connections for live stock price updates
-daphne -p 8001 realtimeapp.asgi:application
+## Configuration
 
+Create a `.env` file in the project root and add the following secrets:
 
+```
+OPEN_AI_KEY = 'sk-your-openai-key'
+DJANGO_SECRET_KEY = "your-django-secret-key"
+GPT_MODEL = "gpt-4o"
+```
 
-#create a .env file and have the following secrets saved. put your own keys
-OPEN_AI_KEY = 'sk-nnnnnnn'
-DJANGO_SECRET_KEY = "django-insecure-tjjjksjx"
-GPT_MODEL =  "gpt-4o"
+Replace the placeholder values with your actual keys.
 
+## Running the Application
 
+1. Start the Redis server:
+   ```
+   redis-server
+   ```
 
+2. Start the Celery worker:
+   ```
+   celery -A realtimeapp worker -l INFO
+   ```
 
-API Usage
-The project includes a RESTful API for stock data. You can access it at /api/stocks/.
-Contributing
+3. Start the Celery beat scheduler:
+   ```
+   celery -A realtimeapp beat -l INFO
+   ```
+
+4. Run the Django development server:
+   ```
+   python manage.py runserver
+   ```
+
+   Note: Fundamental analysis will be up-to-date, but stock prices might not update in real-time.
+
+5. (Optional) For real-time price updates, run the application using Daphne:
+   ```
+   daphne -p 8001 realtimeapp.asgi:application
+   ```
+
+## API Usage
+
+The project includes a RESTful API for stock data. You can access it at `/api/stocks/`.
+
+## Contributing
+
 Contributions are welcome! Please feel free to submit a Pull Request.
+##Contact
+Email: aithequant@gmail.com
+
